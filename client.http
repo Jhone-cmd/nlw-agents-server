@@ -3,8 +3,24 @@
 
 ###
 
+@name healthCheck
 GET {{baseUrl}}/health
 
 ###
 
+@name getRooms
 GET {{baseUrl}}/rooms
+
+
+###
+@name createRoom
+POST  {{baseUrl}}/rooms
+Content-Type: application/json
+
+{
+    "name": "Sala de Teste",
+    "description": "Essa é uma sala de teste."
+}
+
+# References
+@roomId: {{createRoom.response.body.$.JsonPath.roomId}}
