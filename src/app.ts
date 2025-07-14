@@ -6,6 +6,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import { createRoom } from './routes/create-romm.ts';
+import { getRoomQuestions } from './routes/get-room-questions.ts';
 import { getRooms } from './routes/get-rooms.ts';
 import { health } from './routes/health.ts';
 
@@ -21,3 +22,4 @@ app.setValidatorCompiler(validatorCompiler);
 app.register(health);
 app.register(getRooms);
 app.register(createRoom);
+app.register(getRoomQuestions);

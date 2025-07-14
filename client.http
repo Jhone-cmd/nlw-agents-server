@@ -3,17 +3,17 @@
 
 ###
 
-@name healthCheck
+# @name healthCheck
 GET {{baseUrl}}/health
 
 ###
 
-@name getRooms
+# @name getRooms
 GET {{baseUrl}}/rooms
 
 
 ###
-@name createRoom
+# @name createRoom
 POST  {{baseUrl}}/rooms
 Content-Type: application/json
 
@@ -22,5 +22,8 @@ Content-Type: application/json
     "description": "Essa é uma sala de teste."
 }
 
-# References
-@roomId: {{createRoom.response.body.$.JsonPath.roomId}}
+
+###
+
+# @name getRoomQuestions
+GET {{baseUrl}}/rooms/111179ed-6778-47da-3cb9-f8813aabe33b/questions
