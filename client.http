@@ -22,8 +22,22 @@ Content-Type: application/json
     "description": "Essa é uma sala de teste."
 }
 
+###
+# References
+@roomId = {{createRoom.response.body.$.roomId}}
+
 
 ###
 
 # @name getRoomQuestions
-GET {{baseUrl}}/rooms/111179ed-6778-47da-3cb9-f8813aabe33b/questions
+GET {{baseUrl}}/rooms/{{roomId}}/questions
+
+
+###
+# @name createQuestion
+POST  {{baseUrl}}/rooms/{{roomId}}/questions
+Content-Type: application/json
+
+{
+    "question": "Qual a diferença de X e Y?"
+}
