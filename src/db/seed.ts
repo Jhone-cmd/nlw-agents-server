@@ -14,6 +14,9 @@ await seed(db, schema).refine((f) => {
         createdAt: f.timestamp(),
       },
     },
+    questions: {
+      count: 20,
+    },
   };
 });
 
