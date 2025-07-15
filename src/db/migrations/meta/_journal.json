@@ -15,6 +15,13 @@
       "when": 1752517129858,
       "tag": "0001_lowly_boom_boom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1752609919876,
+      "tag": "0002_simple_annihilus",
+      "breakpoints": true
     }
   ]
 }
