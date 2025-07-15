@@ -10,26 +10,30 @@ export const getRoomQuestions: FastifyPluginCallbackZod = (app) => {
     {
       schema: {
         params: z.object({
-          roomId: z.string(),
+          roomId: z.uuid(),
         }),
       },
     },
-    async (request) => {
-      const { roomId } = request.params;
-      const { questions } = schema;
+    async (request, _) => {
+      try {
+        const { roomId } = request.params;
+        const { questions } = schema;
 
-      const results = await db
-        .select({
-          id: questions.id,
-          question: questions.question,
-          answer: questions.answer,
-          createdAt: questions.createdAt,
-        })
-        .from(questions)
-        .where(eq(questions.roomId, roomId))
-        .orderBy(desc(questions.createdAt));
+        const results = await db
+          .select({
+            id: questions.id,
+            question: questions.question,
+            answer: questions.answer,
+            createdAt: questions.createdAt,
+          })
+          .from(questions)
+          .where(eq(questions.roomId, roomId))
+          .orderBy(desc(questions.createdAt));
 
-      return { results };
+        return { results };
+      } catch (error) {
+        console.warn(error);
+      }
     }
   );
 };

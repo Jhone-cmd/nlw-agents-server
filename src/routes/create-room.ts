@@ -4,40 +4,36 @@ import { db } from '../db/connection.ts';
 import { schema } from '../db/schema/index.ts';
 import { FailedCreate } from '../errors/failed-create.ts';
 
-export const createQuestion: FastifyPluginCallbackZod = (app) => {
+export const createRoom: FastifyPluginCallbackZod = (app) => {
   app.post(
-    '/rooms/:roomId/questions',
+    '/rooms',
     {
       schema: {
-        params: z.object({
-          roomId: z.string(),
-        }),
         body: z.object({
-          question: z.string().min(3),
+          name: z.string().min(5),
+          description: z.string().optional(),
         }),
       },
     },
     async (request, reply) => {
       try {
-        const { roomId } = request.params;
-        const { question } = request.body;
-        const { questions } = schema;
-
+        const { name, description } = request.body;
+        const { rooms } = schema;
         const result = await db
-          .insert(questions)
+          .insert(rooms)
           .values({
-            question,
-            roomId,
+            name,
+            description,
           })
           .returning();
 
-        const insertedQuestion = result[1];
+        const insertedRoom = result[0];
 
-        if (!insertedQuestion) {
-          throw new FailedCreate('question');
+        if (!insertedRoom) {
+          throw new FailedCreate('room');
         }
 
-        reply.status(201).send({ questionId: insertedQuestion.id });
+        reply.status(201).send({ roomId: insertedRoom.id });
       } catch (error) {
         if (error instanceof FailedCreate) {
           return reply.status(400).send({ message: error.message });
