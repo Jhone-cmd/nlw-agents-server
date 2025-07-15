@@ -37,7 +37,7 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
           throw new FailedCreate('question');
         }
 
-        reply.status(201).send({ questionId: insertedQuestion.id });
+        return reply.status(201).send({ questionId: insertedQuestion.id });
       } catch (error) {
         if (error instanceof FailedCreate) {
           return reply.status(400).send({ message: error.message });

@@ -33,7 +33,7 @@ export const createRoom: FastifyPluginCallbackZod = (app) => {
           throw new FailedCreate('room');
         }
 
-        reply.status(201).send({ roomId: insertedRoom.id });
+        return reply.status(201).send({ roomId: insertedRoom.id });
       } catch (error) {
         if (error instanceof FailedCreate) {
           return reply.status(400).send({ message: error.message });
