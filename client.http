@@ -41,3 +41,13 @@ Content-Type: application/json
 {
     "question": "Qual a diferença de X e Y?"
 }
+
+
+###
+# @name uploadAudio
+POST  {{baseUrl}}/rooms/{{roomId}}/audio
+Content-Type: application/x-www-form-urlencoded
+
+{
+    "question": "Qual a diferença de X e Y?"
+}
