@@ -1,11 +1,10 @@
 import { and, eq, sql } from 'drizzle-orm';
-import { vector } from 'drizzle-orm/pg-core';
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 import z from 'zod/v4';
 import { db } from '../db/connection.ts';
 import { schema } from '../db/schema/index.ts';
 import { FailedCreate } from '../errors/failed-create.ts';
-import { generateEmbeddings } from '../services/gemini.ts';
+import { generateAnswer, generateEmbeddings } from '../services/gemini.ts';
 
 export const createQuestion: FastifyPluginCallbackZod = (app) => {
   app.post(
@@ -48,22 +47,30 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
           )
           .limit(5);
 
-        // const result = await db
-        //   .insert(questions)
-        //   .values({
-        //     question,
-        //     roomId,
-        //   })
-        //   .returning();
+        let answer: string | null = null;
 
-        // const insertedQuestion = result[0];
+        if (chunks.length > 0) {
+          const transcriptions = chunks.map((chunk) => chunk.transcription);
 
-        // if (!insertedQuestion) {
-        //   throw new FailedCreate('question');
-        // }
+          answer = await generateAnswer(question, transcriptions);
+        }
 
-        // return reply.status(201).send({ questionId: insertedQuestion.id });
-        return chunks;
+        const result = await db
+          .insert(questions)
+          .values({
+            roomId,
+            question,
+            answer,
+          })
+          .returning();
+
+        const insertedQuestion = result[0];
+
+        if (!insertedQuestion) {
+          throw new FailedCreate('question');
+        }
+
+        return reply.status(201).send({ questionId: insertedQuestion.id });
       } catch (error) {
         if (error instanceof FailedCreate) {
           return reply.status(400).send({ message: error.message });
