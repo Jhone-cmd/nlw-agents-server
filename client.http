@@ -18,8 +18,8 @@ POST  {{baseUrl}}/rooms
 Content-Type: application/json
 
 {
-    "name": "Sala de Teste",
-    "description": "Essa é uma sala de teste."
+    "name": "Sala do React",
+    "description": "Essa é uma sala é uma pergunta referente ao React."
 }
 
 ###
@@ -39,7 +39,7 @@ POST  {{baseUrl}}/rooms/{{roomId}}/questions
 Content-Type: application/json
 
 {
-    "question": "Qual a diferença de X e Y?"
+    "question": "O que é React?"
 }
 
 
