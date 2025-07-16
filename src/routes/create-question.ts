@@ -31,7 +31,7 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
           })
           .returning();
 
-        const insertedQuestion = result[1];
+        const insertedQuestion = result[0];
 
         if (!insertedQuestion) {
           throw new FailedCreate('question');

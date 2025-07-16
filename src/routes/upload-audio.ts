@@ -1,6 +1,9 @@
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 import z from 'zod/v4';
-import { transcribeAudio } from '../services/gemini.ts';
+import { db } from '../db/connection.ts';
+import { schema } from '../db/schema/index.ts';
+import { FailedCreate } from '../errors/failed-create.ts';
+import { generateEmbeddings, transcribeAudio } from '../services/gemini.ts';
 
 export const uploadAudio: FastifyPluginCallbackZod = (app) => {
   app.post(
@@ -12,8 +15,9 @@ export const uploadAudio: FastifyPluginCallbackZod = (app) => {
         }),
       },
     },
-    async (request, _) => {
+    async (request, reply) => {
       try {
+        const { audioChunks } = schema;
         const { roomId } = request.params;
         const audio = await request.file();
 
@@ -29,11 +33,30 @@ export const uploadAudio: FastifyPluginCallbackZod = (app) => {
           audio.mimetype
         );
 
-        console.log(transcription);
+        const embeddings = await generateEmbeddings(transcription);
 
-        return 'ok';
+        const result = await db
+          .insert(audioChunks)
+          .values({
+            roomId,
+            transcription,
+            embeddings,
+          })
+          .returning();
+
+        const chunk = result[0];
+
+        if (!chunk) {
+          throw new FailedCreate('audio chunk');
+        }
+
+        return reply.status(201).send({ audio_chunk: chunk.id });
       } catch (error) {
-        console.warn(error);
+        if (error instanceof FailedCreate) {
+          return reply.status(400).send({ message: error.message });
+        }
+
+        throw error;
       }
     }
   );

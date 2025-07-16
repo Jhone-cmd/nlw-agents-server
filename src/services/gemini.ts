@@ -28,3 +28,20 @@ export async function transcribeAudio(audioAsBase64: string, mimeType: string) {
 
   return response.text;
 }
+
+export async function generateEmbeddings(text: string) {
+  const response = await gemini.models.embedContent({
+    model: 'gemini-embedding-001',
+    contents: [{ text }],
+    config: {
+      outputDimensionality: 768,
+      taskType: 'RETRIEVAL_DOCUMENT',
+    },
+  });
+
+  if (!response.embeddings?.[0].values) {
+    throw new Error('Não foi possível gerar os embeddings');
+  }
+
+  return response.embeddings?.[0].values;
+}

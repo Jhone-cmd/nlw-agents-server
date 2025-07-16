@@ -46,8 +46,11 @@ Content-Type: application/json
 ###
 # @name uploadAudio
 POST  {{baseUrl}}/rooms/{{roomId}}/audio
-Content-Type: application/x-www-form-urlencoded
+Content-Type: multipart/form-data; boundary=boundary
 
-{
-    "question": "Qual a diferença de X e Y?"
-}
+--boundary
+Content-Disposition: form-data; name="audio_file"; filename="react.mp3"
+Content-Type: audio/mpeg
+
+< ./audio/react.mp3
+--boundary
