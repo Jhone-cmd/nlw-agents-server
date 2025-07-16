@@ -1,6 +1,6 @@
 import { and, eq, sql } from 'drizzle-orm';
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
-import z from 'zod/v4';
+import z from 'zod';
 import { db } from '../db/connection.ts';
 import { schema } from '../db/schema/index.ts';
 import { FailedCreate } from '../errors/failed-create.ts';
@@ -11,12 +11,23 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
     '/rooms/:roomId/questions',
     {
       schema: {
+        tags: ['Questions'],
+        description: 'Create a new question in a room',
+        summary: 'Create Question',
         params: z.object({
-          roomId: z.string(),
+          roomId: z.uuid(),
         }),
         body: z.object({
           question: z.string().min(3),
         }),
+        response: {
+          201: z.object({
+            questionId: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {

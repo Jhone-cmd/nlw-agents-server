@@ -1,5 +1,5 @@
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
-import z from 'zod/v4';
+import z from 'zod';
 import { db } from '../db/connection.ts';
 import { schema } from '../db/schema/index.ts';
 import { FailedCreate } from '../errors/failed-create.ts';
@@ -9,10 +9,21 @@ export const createRoom: FastifyPluginCallbackZod = (app) => {
     '/rooms',
     {
       schema: {
+        tags: ['Rooms'],
+        description: 'Create a new room',
+        summary: 'Create Room',
         body: z.object({
           name: z.string().min(5),
           description: z.string().optional(),
         }),
+        response: {
+          201: z.object({
+            roomId: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {

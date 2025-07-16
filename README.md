@@ -37,6 +37,15 @@ Esta aplicação é uma API backend para gerenciamento de salas de perguntas e r
 - [postgres](https://github.com/porsager/postgres) - Cliente PostgreSQL para Node.js.
 - [@fastify/cors](https://github.com/fastify/fastify-cors) - Middleware CORS para Fastify.
 - [@fastify/multipart](https://github.com/fastify/fastify-multipart) - Suporte a uploads multipart.
+- [@fastify/swagger](https://github.com/fastify/fastify-swagger) - Documentação automática dos endpoints da API.
+- [@fastify/swagger-ui](https://github.com/fastify/fastify-swagger-ui) - Interface visual para documentação Swagger.
+
+## Documentação da API (Swagger)
+
+A documentação dos endpoints está disponível automaticamente via Swagger.
+
+- **Acesse:** [http://localhost:3333/docs](http://localhost:3333/docs)
+- **Descrição:** Todos os endpoints, parâmetros, respostas e exemplos podem ser consultados e testados diretamente pela interface Swagger UI.
 
 ## Como executar
 
