@@ -13,7 +13,7 @@ export const getRoomQuestions: FastifyPluginCallbackZod = (app) => {
         description: 'Get all questions in a room',
         summary: 'Get Room Questions',
         params: z.object({
-          roomId: z.uuid(),
+          roomId: z.uuidv4(),
         }),
         response: {
           200: z.object({

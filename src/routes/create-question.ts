@@ -15,7 +15,7 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
         description: 'Create a new question in a room',
         summary: 'Create Question',
         params: z.object({
-          roomId: z.uuid(),
+          roomId: z.uuidv4(),
         }),
         body: z.object({
           question: z.string().min(3),

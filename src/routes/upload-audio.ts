@@ -14,11 +14,8 @@ export const uploadAudio: FastifyPluginCallbackZod = (app) => {
         description: 'Upload audio file for a room',
         summary: 'Upload Audio',
         consumes: ['multipart/form-data'],
-        body: z.object({
-          audio_file: z.instanceof(Buffer).optional(),
-        }),
         params: z.object({
-          roomId: z.uuid(),
+          roomId: z.uuidv4(),
         }),
         response: {
           201: z.object({

@@ -27,7 +27,6 @@ app.register(multipart, {
   limits: {
     fileSize: 50 * 1024 * 1024, // 50 MB
   },
-  attachFieldsToBody: true,
 });
 
 app.setSerializerCompiler(serializerCompiler);
@@ -41,8 +40,30 @@ app.register(fastifySwagger, {
       version: '1.0.0',
     },
   },
-  transform: jsonSchemaTransform,
-  mode: 'dynamic',
+  transform: (data) => {
+    const { schema, url } = jsonSchemaTransform(data);
+
+    if (schema.consumes?.includes('multipart/form-data')) {
+      if (schema.body === undefined) {
+        schema.body = {
+          type: 'object',
+          required: [],
+          properties: {},
+        };
+      }
+
+      // @ts-expect-error
+      schema.body.properties.file = {
+        type: 'string',
+        format: 'binary',
+      };
+
+      // @ts-expect-error
+      schema.body.required?.push('file');
+    }
+
+    return { schema, url };
+  },
 });
 
 app.register(fastifySwaggerUi, {
