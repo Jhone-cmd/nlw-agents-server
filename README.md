@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Esta aplicação é uma API backend para gerenciamento de salas de perguntas e respostas, com suporte a transcrição de áudio e busca semântica utilizando embeddings. Usuários podem criar salas, enviar perguntas, fazer upload de áudios para transcrição automática e obter respostas baseadas no conteúdo transcrito das aulas.
+Esta aplicação é uma API backend para gerenciamento de salas de perguntas e respostas, com suporte a transcrição de áudio e busca semântica utilizando embeddings. Usuários podem criar salas, enviar perguntas, fazer upload de áudios para transcrição automática e obter respostas baseadas no conteúdo transcrito das aulas. Esse projeto foi desenvolvido no evento NLW Agents da RocketSeat.
 
 ## Requisitos Funcionais
 
