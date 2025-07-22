@@ -1,4 +1,4 @@
-import { count, eq } from 'drizzle-orm';
+import { count, desc, eq } from 'drizzle-orm';
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { db } from '../db/connection.ts';
@@ -42,7 +42,7 @@ export const getRooms: FastifyPluginCallbackZod = (app) => {
         .from(rooms)
         .leftJoin(questions, eq(questions.roomId, rooms.id))
         .groupBy(rooms.id)
-        .orderBy(rooms.createdAt);
+        .orderBy(desc(rooms.createdAt));
 
       return { results };
     }
