@@ -30,21 +30,24 @@ export const getRooms: FastifyPluginCallbackZod = (app) => {
       },
     },
     async () => {
-      const { rooms, questions } = schema;
+      try {
+        const { rooms, questions } = schema;
+        const results = await db
+          .select({
+            id: rooms.id,
+            name: rooms.name,
+            createdAt: rooms.createdAt,
+            questionsCount: count(questions.id),
+          })
+          .from(rooms)
+          .leftJoin(questions, eq(questions.roomId, rooms.id))
+          .groupBy(rooms.id)
+          .orderBy(desc(rooms.createdAt));
 
-      const results = await db
-        .select({
-          id: rooms.id,
-          name: rooms.name,
-          createdAt: rooms.createdAt,
-          questionsCount: count(questions.id),
-        })
-        .from(rooms)
-        .leftJoin(questions, eq(questions.roomId, rooms.id))
-        .groupBy(rooms.id)
-        .orderBy(desc(rooms.createdAt));
-
-      return { results };
+        return { results };
+      } catch (error) {
+        console.warn(error);
+      }
     }
   );
 };

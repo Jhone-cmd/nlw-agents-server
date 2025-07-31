@@ -23,6 +23,7 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
         response: {
           201: z.object({
             questionId: z.string(),
+            answer: z.string().nullable(),
           }),
           400: z.object({
             message: z.string(),
@@ -81,7 +82,9 @@ export const createQuestion: FastifyPluginCallbackZod = (app) => {
           throw new FailedCreate('question');
         }
 
-        return reply.status(201).send({ questionId: insertedQuestion.id });
+        return reply
+          .status(201)
+          .send({ questionId: insertedQuestion.id, answer });
       } catch (error) {
         if (error instanceof FailedCreate) {
           return reply.status(400).send({ message: error.message });
