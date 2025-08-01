@@ -21,9 +21,9 @@ export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(cors, {
   origin: [
+    'https://nlw-agents-web.vercel.app',
     'http://localhost:5173',
     'http://localhost:4173',
-    'https://nlw-agents-web.vercel.app',
   ],
 });
 
