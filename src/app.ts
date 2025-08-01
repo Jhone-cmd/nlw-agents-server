@@ -20,7 +20,11 @@ import { uploadAudio } from './routes/upload-audio.ts';
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(cors, {
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'https://nlw-agents-web.vercel.app',
+  ],
 });
 
 app.register(multipart, {
